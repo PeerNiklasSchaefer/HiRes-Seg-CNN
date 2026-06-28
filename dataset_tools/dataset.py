@@ -2,7 +2,7 @@ import os
 from .dataset_components import generate_image_and_mask
 
 def generate_dataset(img_width, img_height = 32, num_images_train=4000, num_images_validation=2000, num_images_test=1000,
-                     circle_radius = 4, num_circles = 2, line_width = 3, max_apart = 2, min_apart = 1, save_descr = ""):
+                     circle_radius = 4, num_circles = 2, line_width = 3, max_apart = 2, min_apart = 1, different_class = False, save_descr = ""):
 
     num_subdomains = img_width // 32
     image_size = (img_width, img_height)
@@ -56,7 +56,7 @@ def generate_dataset(img_width, img_height = 32, num_images_train=4000, num_imag
     for i in range(num_images_train):
         image, mask = generate_image_and_mask(image_size=image_size, num_circles=num_circles, 
                                               circle_radius=circle_radius, line_width=line_width, num_subdomains = num_subdomains,
-                                              min_apart = min_apart, max_apart = max_apart, different_class=True)
+                                              min_apart = min_apart, max_apart = max_apart, different_class=different_class)
         image.save(os.path.join(img_dir, f"image_{i}.png"))
         mask.save(os.path.join(mask_dir, f"mask_{i}.png"))
     
@@ -65,7 +65,7 @@ def generate_dataset(img_width, img_height = 32, num_images_train=4000, num_imag
     for i in range(num_images_validation):
         image, mask = generate_image_and_mask(image_size=image_size, num_circles=num_circles, 
                                               circle_radius=circle_radius, line_width=line_width, num_subdomains = num_subdomains,
-                                              min_apart = min_apart, max_apart = max_apart, different_class=True)
+                                              min_apart = min_apart, max_apart = max_apart, different_class=different_class)
         image.save(os.path.join(img_dir_val, f"image_{i}.png"))
         mask.save(os.path.join(mask_dir_val, f"mask_{i}.png"))
 
@@ -73,9 +73,10 @@ def generate_dataset(img_width, img_height = 32, num_images_train=4000, num_imag
     for i in range(num_images_test):
         image, mask = generate_image_and_mask(image_size=image_size, num_circles=num_circles, 
                                               circle_radius=circle_radius, line_width=line_width, num_subdomains = num_subdomains,
-                                              min_apart = min_apart, max_apart = max_apart, different_class=True)
+                                              min_apart = min_apart, max_apart = max_apart, different_class=different_class)
         image.save(os.path.join(img_dir_test, f"image_{i}.png"))
         mask.save(os.path.join(mask_dir_test, f"mask_{i}.png"))
 
 if __name__=="__main__":
-    generate_dataset(img_width=64)
+    #generate_dataset(img_width=64)
+    generate_dataset(img_width=96, img_height=32, num_images_train=4000, num_images_validation=2000, num_images_test=1000, circle_radius=4, num_circles=1, line_width=3, max_apart=2, min_apart=1, different_class=False, save_descr='1x3')

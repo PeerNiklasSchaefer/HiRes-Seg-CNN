@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import copy
 import torchvision.models
-from models_2d.model2d_components import DoubleConv,CNNCommunicator, OutConv
+from .model2d_components import DoubleConv,CNNCommunicator, OutConv
 import torch.nn.functional as F
 
 class UpResNet(nn.Module):

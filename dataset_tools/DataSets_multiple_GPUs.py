@@ -13,11 +13,27 @@ def custom_target_transform(mask):
     return mask
 
 def custom_transform(image):
+    '''
     image = np.array(image)   # Convert to float and normalize
     image = image / 255.0
     image = torch.from_numpy(image)
     image = image.permute(2,0,1)
     image = torchvision.transforms.functional.normalize(image, [0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225], inplace=False)
+    return image
+    '''
+    # Convert to float32 immediately (PyTorch models expect float inputs)
+    image = np.array(image, dtype=np.float32)   
+    # Normalizing to [0, 1] is highly recommended for neural networks
+    image = image / 255.0 
+    image = torch.from_numpy(image)
+    
+    if len(image.shape) == 2:
+        # It's Grayscale (Height, Width). Add the channel dim -> (1, Height, Width)
+        image = image.unsqueeze(0) 
+    elif len(image.shape) == 3:
+        # It's RGB/Multichannel (Height, Width, Channels) -> (Channels, Height, Width)
+        image = image.permute(2, 0, 1)
+        
     return image
 
 def data_augmentation(image, mask):
@@ -66,8 +82,12 @@ class DeepGlobeDatasetMultipleGPUs(Dataset):
     
     def __split_image(self, full_image):
         subdomain_tensors = []
-        subdomain_height = full_image.shape[2] // self.subdomains_dist[0]
-        subdomain_width = full_image.shape[1] // self.subdomains_dist[1]
+        #subdomain_height = full_image.shape[2] // self.subdomains_dist[0]
+        #subdomain_width = full_image.shape[1] // self.subdomains_dist[1]
+
+        subdomain_height = full_image.shape[1] // self.subdomains_dist[0]  # H / rows
+        subdomain_width  = full_image.shape[2] // self.subdomains_dist[1]  # W / cols
+
 
         for i in range(self.subdomains_dist[0]):
             for j in range(self.subdomains_dist[1]):

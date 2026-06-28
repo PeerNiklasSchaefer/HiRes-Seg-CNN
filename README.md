@@ -18,3 +18,10 @@ Welcome to the repository for the thesis titled “A Domain Decomposition-based 
 2. **Model Initialization**: Access the scripts in the `models_2d` folder to initialize the proposed model or baseline models.
 3. **Training**: Utilize `train_deepglobe_resnet_unet.py` to train your segmentation model.
 4. **Evaluation**: After training, use `evaluate.py` to evaluate model performance and generate confusion matrices.
+
+
+
+### Step by Step Reproduction
+1. In the Upper-Level folder call 'python -m dataset_tools.dataset' --> creates synthetic datasets
+2. python train_synthetic_unet.py --subdomain_dist 1 3 --image_size 32 --image_size_test 32 --batch_size 8 --num_epochs 5 --comm --num_comm_fmaps 64 --exchange_fmaps
+3. python train_synthetic_unet.py --subdomain_dist 1 3 --image_size 32 --image_size_test 32 --batch_size 8 --num_epochs 5
